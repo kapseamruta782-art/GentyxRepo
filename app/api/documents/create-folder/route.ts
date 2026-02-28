@@ -1,10 +1,10 @@
 // app/api/documents/create-folder/route.ts
 import { NextResponse } from "next/server";
-import { BlobServiceClient } from "@azure/storage-blob";
 import { logAudit, AuditActions } from "@/lib/audit";
 import { queueFolderCreatedNotification } from "@/lib/notification-batcher";
 import { supabase } from "@/lib/db";
 import { getClientRootFolder } from "@/lib/storage-utils";
+import { containerClient } from "@/lib/supabase";
 
 export async function POST(req: Request) {
   try {
@@ -17,11 +17,6 @@ export async function POST(req: Request) {
       );
     }
 
-    const conn = process.env.AZURE_STORAGE_CONNECTION_STRING!;
-    const blobServiceClient = BlobServiceClient.fromConnectionString(conn);
-    const containerClient = blobServiceClient.getContainerClient(
-      process.env.AZURE_STORAGE_CONTAINER_NAME!
-    );
     await containerClient.createIfNotExists();
 
     const rootFolder = await getClientRootFolder(clientId);
@@ -44,7 +39,8 @@ export async function POST(req: Request) {
 
     for await (const item of existingFolders) {
       if (item.kind === "prefix") {
-        const existingName = item.name
+        const itemName = (item as any).name;
+        const existingName = itemName
           .replace(parentPath, "")
           .replace(/\/$/, "");
 

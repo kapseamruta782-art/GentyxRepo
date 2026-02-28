@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server";
-import { containerClient } from "@/lib/azure";
+import { containerClient } from "@/lib/supabase";
 import { getClientRootFolder } from "@/lib/storage-utils";
 
 export const dynamic = "force-dynamic";

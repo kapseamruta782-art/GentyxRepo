@@ -1,9 +1,7 @@
 // app/api/documents/get/route.ts
 import { NextResponse } from "next/server";
-import {
-  BlobServiceClient,
-  StorageSharedKeyCredential,
-} from "@azure/storage-blob";
+import { getClientRootFolder } from "@/lib/storage-utils";
+import { containerClient } from "@/lib/supabase";
 
 export async function GET(req: Request) {
   try {
@@ -19,20 +17,8 @@ export async function GET(req: Request) {
       );
     }
 
-    const account = process.env.AZURE_STORAGE_ACCOUNT_NAME!;
-    const key = process.env.AZURE_STORAGE_ACCOUNT_KEY!;
-    const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME!;
-
-    const sharedKeyCredential = new StorageSharedKeyCredential(account, key);
-    const blobServiceClient = new BlobServiceClient(
-      `https://${account}.blob.core.windows.net`,
-      sharedKeyCredential
-    );
-
-    const containerClient =
-      blobServiceClient.getContainerClient(containerName);
-
-    const prefix = `client-${clientId}/`;
+    const rootFolder = await getClientRootFolder(clientId);
+    const prefix = `${rootFolder}/`;
 
     // ---------------------------------------------------------
     // MODE 1 → Return only folders
@@ -69,16 +55,16 @@ export async function GET(req: Request) {
       for await (const blob of containerClient.listBlobsFlat({
         prefix: filePrefix,
       })) {
-        const fileName = blob.name.replace(filePrefix, "");
+        const fileName = (blob as any).name.replace(filePrefix, "");
 
         if (fileName === ".keep" || fileName.endsWith("/")) continue;
 
         files.push({
           name: fileName,
-          url: `${containerClient.url}/${blob.name}`,
-          size: blob.properties.contentLength,
-          type: blob.name.split(".").pop(),
-          path: blob.name,
+          url: `${(containerClient as any).getBlockBlobClient(blob.name).url}`,
+          size: (blob as any).properties.contentLength,
+          type: (blob as any).name.split(".").pop(),
+          path: (blob as any).name,
         });
       }
 
@@ -97,7 +83,7 @@ export async function GET(req: Request) {
       { status: 400 }
     );
   } catch (err: any) {
-    console.error(err);
+    console.error("GET DOCUMENTS ERROR:", err);
     return NextResponse.json(
       { success: false, error: err.message },
       { status: 500 }

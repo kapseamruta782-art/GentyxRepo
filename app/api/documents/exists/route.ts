@@ -41,7 +41,8 @@
 //     }
 // }
 import { NextResponse } from "next/server";
-import { BlobServiceClient } from "@azure/storage-blob";
+import { getClientRootFolder } from "@/lib/storage-utils";
+import { containerClient } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
@@ -59,20 +60,19 @@ export async function GET(req: Request) {
             );
         }
 
-        // Your storage uses: client-<id>/<path>
+        const rootFolder = await getClientRootFolder(clientId);
+
+        // Your storage uses: rootFolder/<path>
         const normalized = fullPath.replace(/^\/+/, "");
-        const blobPath = normalized.startsWith(`client-${clientId}/`)
+        const blobPath = (
+            normalized.startsWith(`${rootFolder}/`) ||
+            normalized.startsWith(`client-${clientId}/`)
+        )
             ? normalized
-            : `client-${clientId}/${normalized}`;
+            : `${rootFolder}/${normalized}`;
 
-        const conn = process.env.AZURE_STORAGE_CONNECTION_STRING!;
-        const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME!;
-
-        const blobServiceClient = BlobServiceClient.fromConnectionString(conn);
-        const containerClient = blobServiceClient.getContainerClient(containerName);
-
-        const blobClient = containerClient.getBlockBlobClient(blobPath);
-        const exists = await blobClient.exists();
+        const blockBlobClient = containerClient.getBlockBlobClient(blobPath);
+        const exists = await blockBlobClient.exists();
 
         return NextResponse.json({ success: true, exists, blobPath });
     } catch (err: any) {

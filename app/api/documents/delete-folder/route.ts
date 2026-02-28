@@ -1,7 +1,6 @@
-
 import { NextResponse } from "next/server";
-import { BlobServiceClient } from "@azure/storage-blob";
 import { getClientRootFolder } from "@/lib/storage-utils";
+import { containerClient } from "@/lib/supabase";
 
 export async function POST(req: Request) {
   try {
@@ -14,15 +13,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const conn = process.env.AZURE_STORAGE_CONNECTION_STRING!;
-    const blobServiceClient = BlobServiceClient.fromConnectionString(conn);
-    const containerClient = blobServiceClient.getContainerClient(
-      process.env.AZURE_STORAGE_CONTAINER_NAME!
-    );
-
     const rootFolder = await getClientRootFolder(clientId);
 
-    // full path like: client-2/folderName
+    // full path like: rootFolder/folderName
     const prefix = `${rootFolder}/${folderPath}`;
     const blobs = containerClient.listBlobsFlat({ prefix });
 

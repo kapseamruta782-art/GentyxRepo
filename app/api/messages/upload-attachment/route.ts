@@ -1,6 +1,6 @@
 // /app/api/messages/upload-attachment/route.ts
 import { NextResponse } from "next/server";
-import { containerClient } from "@/lib/azure";
+import { containerClient } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 

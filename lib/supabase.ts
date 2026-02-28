@@ -1,53 +1,4 @@
-// // // /lib/azure.ts
-// // import { BlobServiceClient } from "@azure/storage-blob";
-
-// // const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING!;
-// // const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME!;
-
-// // // Create BlobServiceClient
-// // export const blobService = BlobServiceClient.fromConnectionString(connectionString);
-
-// // // Get Container Client
-// // export const containerClient = blobService.getContainerClient(containerName);
-
-
-// // /lib/azure.ts
-// import { BlobServiceClient } from "@azure/storage-blob";
-// import { v4 as uuid } from "uuid";
-
-// const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING!;
-// const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME!;
-
-// // Create BlobServiceClient
-// export const blobService = BlobServiceClient.fromConnectionString(connectionString);
-
-// // Get Container Client
-// export const containerClient = blobService.getContainerClient(containerName);
-
-// /**
-//  * Upload a file buffer to Azure Blob Storage
-//  */
-// export async function uploadToAzure(buffer: Buffer, originalName: string) {
-//   const extension = originalName.split(".").pop();
-//   const blobName = `${uuid()}.${extension}`;
-
-//   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-
-//   await blockBlobClient.uploadData(buffer, {
-//     blobHTTPHeaders: {
-//       blobContentType: extension,
-//     },
-//   });
-
-//   return {
-//     blobName,
-//     url: blockBlobClient.url,
-//   };
-// }
-
-
-// /lib/azure.ts
-// lib/azure.ts (Now using Supabase Storage)
+// lib/supabase.ts (Now using Supabase Storage)
 import { supabase } from "./db";
 import { v4 as uuid } from "uuid";
 
@@ -100,6 +51,7 @@ export async function deleteBlob(blobPath: string) {
 // This is a partial shim. Complex usage might still break and require manual fix.
 // For compatibility with routes that used containerClient
 export const containerClient = {
+  createIfNotExists: async () => { }, // Dummy for compatibility
   getBlockBlobClient: (path: string) => ({
     exists: async () => {
       const folder = path.split('/').slice(0, -1).join('/');
@@ -175,5 +127,34 @@ export const containerClient = {
         };
       }
     }
+  },
+  listBlobsFlat: async function* (options: { prefix: string }) {
+    const prefix = options.prefix.replace(/\/$/, "");
+    // Note: Supabase Storage list is not recursive by default in this helper.
+    // For a true "flat" list, we might need to handle recursion if folders are nested.
+    const { data, error } = await supabase.storage.from(BUCKET_NAME).list(prefix);
+
+    if (error) {
+      console.error("Supabase Storage List Flat Error:", error);
+      return;
+    }
+
+    for (const item of data || []) {
+      if (item.id) { // It's a file
+        const fullPath = prefix ? `${prefix}/${item.name}` : item.name;
+        yield {
+          name: fullPath,
+          properties: {
+            contentLength: item.metadata?.size || 0,
+            contentType: item.metadata?.mimetype || "application/octet-stream",
+            lastModified: item.updated_at ? new Date(item.updated_at) : new Date(),
+          }
+        };
+      }
+    }
+  },
+  deleteBlob: async (path: string) => {
+    const { error } = await supabase.storage.from(BUCKET_NAME).remove([path]);
+    if (error) throw error;
   }
 };
