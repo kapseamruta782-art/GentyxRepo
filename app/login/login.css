@@ -1,0 +1,467 @@
+/* login.css */
+/* login.css */
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', 'Inter Fallback', sans-serif;
+  background-color: white;
+  overflow-x: hidden;
+  height: 100%;
+}
+
+/* Page container */
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Logo */
+.mysage-logo {
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+  margin-top: -10px;
+  margin-bottom: -5px;
+  /* Reduced gap */
+}
+
+/* POWERED BY text */
+.powered-by-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #000000;
+  align-self: flex-end;
+  margin-top: 4px;
+  margin-right: -110px;
+  text-align: center;
+  width: 100%;
+}
+
+.login-logo-img {
+  width: 60%;
+  margin-bottom: 20px;
+  align-items: center;
+  margin-left: 75px;
+}
+
+
+/* Green login box */
+.login-box {
+  background-color: #470D1B;
+  /* background-color: #8bc53d; */
+  /* Changed to brand sage green */
+  width: 100%;
+  max-width: 420px;
+  margin-top: 35px;
+  padding: 30px 30px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Title in login box */
+.login-heading {
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Form container */
+.login-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Labels */
+.login-box label {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: -10px;
+}
+
+/* Input fields */
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  background-color: white;
+}
+
+/* Logo wrapper - to control alignment of logo + powered by */
+.logo-wrapper {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* ✅ center logo */
+  position: relative;
+}
+
+
+/* Login button */
+.login-btn {
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  font-size: 14px;
+  border-radius: 25px;
+  padding: 10px 25px;
+  border: none;
+  cursor: pointer;
+  align-self: center;
+  margin-top: 10px;
+}
+
+.login-btn:hover {
+  background-color: #f3f3f3;
+}
+
+/* Error message */
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: -10px;
+}
+
+/* Footer */
+.footer-text {
+  margin-top: 40px;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 480px) {
+  .mysage-logo {
+    max-width: 200px;
+  }
+
+  .login-box {
+    padding: 20px;
+  }
+
+  .login-heading {
+    font-size: 18px;
+  }
+
+  .footer-text {
+    font-size: 12px;
+  }
+}
+
+.password-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-field input {
+  width: 100%;
+}
+
+.password-visibility-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 0;
+  color: #999;
+  /* subtle like placeholder */
+}
+
+.password-visibility-btn:hover {
+  color: #666;
+}
+
+.password-visibility-btn:focus {
+  outline: 2px solid #4c9ffe;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+
+
+
+/* .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: white;
+    font-family: "Poppins", Sans-serif;
+}
+ 
+.login-card {
+    background: #f4f4f9;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+ 
+.login-logo {
+    color: #8bc53d;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+ 
+.login-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #555;
+    font-family: "Poppins", Sans-serif;
+}
+ 
+.login-card form {
+    display: flex;
+    flex-direction: column;
+}
+ 
+.login-card label {
+    text-align: left;
+    margin-bottom: 0.5rem;
+    color: #777;
+}
+ 
+.login-card input {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+ 
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+ 
+.login-button {
+    background-color: #8bc53d;
+    color: white;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+ 
+.login-button:hover {
+    background-color: #8bc53d;
+}
+ 
+.error-message{
+    color: red;
+}
+ 
+.logo {
+    max-width: 150px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  } */
+
+/*Here are the issues That I got from first prompt result :
+we will need a new prompt to solve this bugs :
+1. You can see in image that the whole website dashboard page got moved too much to left see all the texts and all : words like Employee Dashboard and see the Help butthon this should be at the more right that it is now so basically dashboard page needs some proper adjustment to look this proper and okay 
+see the profile button and all should go to right side :
+on dashboard page when you click on view All Submissions then page automaticaly move to submissions page 
+on profile there is issue that is Profile and settings page is not working okay 
+this above is for employees only now below is for manager role okay :
+
+for manager issues :
+we have same issue for UI slightly left is wrong it should be proper and also profile and setting page for manager role is not working :
+approve and reject button should be working and works on frontend properly okay 
+export csv button should be working instead of showing this message :
+color code should use the previous branding we have used many times means we should use this color for button like approve and export csv and add employee which is :
+color: #8bc53d
+
+all color branding should match our old client databse appicaiton which is AccountHub so see the attached image for reference okay : see the colors we have clients page and also for login page so match with these colors :
+everything should be in that type of color brandings okay 
+
+On manager role you can see that under employee tab we have some actions option which is for view profile , view submissions , edit employee and delete employee so this everything should be in working stage okay this should have their respective page and data okay so add this also in prompt 
+Add EMployee should be working and must have a good form UI and as you have seen we left some space in the right of page which should be adjusted okay 
+
+see this page which opens after click on link or opening link this should be in center right :
+why there is too much space from bottom on welcome to workhub and less space from top so add this also in prompt forgot password should be in working stage and next is 
+
+when manager add new employee in this form also add the email and password option for this new employee so he can login into workhub with that credentials and when he logged in then on profile page there should be option to change password for employee and also for manager okay now work on those points and create the updated prompt to do this all in one master prompt :
+Also work on all alignments okay 
+and profile and setting pages should be fully funtional and working and rest all also okay now create the prompt   */
+
+/* ---------------------------------------------------- */
+/* NEW LOGIN PAGE STYLES (Redesign) */
+/* ---------------------------------------------------- */
+
+.login-page-new {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  color: white;
+  /* Dark red gradient background */
+  background: radial-gradient(circle at center, #5a1f2d 0%, #1a0508 100%);
+  font-family: "Inter", sans-serif;
+  padding: 20px;
+}
+
+.logo-container {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.logo-img {
+  width: 180px;
+  max-width: 80%;
+  height: auto;
+}
+
+.portal-title {
+  font-family: "Georgia", "Times New Roman", serif;
+  /* Match the serif font in image */
+  font-size: 3rem;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.login-form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: white;
+  /* Ensure label is white */
+  text-align: left;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 4px;
+  border: none;
+  /* Remove border */
+  font-size: 1rem;
+  color: #333;
+  background-color: white;
+  outline: none;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.eye-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.login-button-new {
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 50px;
+  /* Pill shape */
+  padding: 12px 50px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  transition: opacity 0.2s;
+}
+
+.login-button-new:hover {
+  opacity: 0.9;
+}
+
+.login-button-new:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error-text {
+  color: #ffcccc;
+  /* Light red for visibility on dark background */
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.footer-container {
+  margin-top: 4rem;
+  text-align: center;
+  font-size: 0.7rem;
+  opacity: 1;
+  color: white;
+}
+
+.powered-by {
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+  font-size: 9px;
+}
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 480px) {
+  .portal-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .login-form-container {
+    padding: 0 10px;
+  }
+}
