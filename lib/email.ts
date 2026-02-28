@@ -1,10 +1,17 @@
 // lib/email.ts
-import { EmailClient, EmailMessage } from "@azure/communication-email";
+import nodemailer from "nodemailer";
 import { logEmail, updateEmailLogStatus, type EmailType } from "@/lib/email-logger";
 
-// Create reusable email client using Azure Communication Services
-const connectionString = process.env.AZURE_COMMUNICATION_CONNECTION_STRING || "";
-const emailClient = connectionString ? new EmailClient(connectionString) : null;
+// Create reusable SMTP transporter
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST || "",
+  port: parseInt(process.env.SMTP_PORT || "587"),
+  secure: process.env.SMTP_SECURE === "true", // true for 465, false for other ports
+  auth: {
+    user: process.env.SMTP_USER || "",
+    pass: process.env.SMTP_PASS || "",
+  },
+});
 
 interface SendEmailOptions {
   to: string;
@@ -27,8 +34,8 @@ interface SendEmailWithLoggingOptions extends SendEmailOptions {
 }
 
 /**
- * Send an email using Azure Communication Services
- * Includes retry logic with exponential backoff for 429 rate-limiting
+ * Send an email using SMTP (Nodemailer)
+ * Includes retry logic with exponential backoff for rate-limiting
  * Optionally logs the email to the database for admin visibility
  */
 export async function sendEmail(options: SendEmailOptions | SendEmailWithLoggingOptions) {
@@ -36,8 +43,9 @@ export async function sendEmail(options: SendEmailOptions | SendEmailWithLogging
   const logging = 'logging' in options ? options.logging : undefined;
 
   console.log("📧 sendEmail called with:", { to, subject: subject.substring(0, 50) });
-  console.log("📧 ACS Config:", {
-    connectionString: process.env.AZURE_COMMUNICATION_CONNECTION_STRING ? "✅ Set" : "❌ Missing",
+  console.log("📧 SMTP Config:", {
+    host: process.env.SMTP_HOST ? "✅ Set" : "❌ Missing",
+    user: process.env.SMTP_USER ? "✅ Set" : "❌ Missing",
     sender: process.env.AZURE_EMAIL_SENDER
   });
 
@@ -63,14 +71,6 @@ export async function sendEmail(options: SendEmailOptions | SendEmailWithLogging
     }
   }
 
-  if (!emailClient) {
-    console.error("❌ Email client not initialized - missing AZURE_COMMUNICATION_CONNECTION_STRING");
-    if (emailLogId) {
-      await updateEmailLogStatus(emailLogId, 'Failed', 'Email client not configured');
-    }
-    return { success: false, error: "Email client not configured" };
-  }
-
   const sender = process.env.AZURE_EMAIL_SENDER;
   if (!sender) {
     console.error("❌ Missing AZURE_EMAIL_SENDER environment variable");
@@ -80,16 +80,12 @@ export async function sendEmail(options: SendEmailOptions | SendEmailWithLogging
     return { success: false, error: "Email sender not configured" };
   }
 
-  const message: EmailMessage = {
-    senderAddress: sender,
-    content: {
-      subject,
-      html,
-      plainText: text || html.replace(/<[^>]*>/g, ""),
-    },
-    recipients: {
-      to: [{ address: to }],
-    },
+  const mailOptions = {
+    from: sender,
+    to,
+    subject,
+    html,
+    text: text || html.replace(/<[^>]*>/g, ""),
   };
 
   // Retry with exponential backoff: 5s, 10s, 20s, 40s
@@ -98,37 +94,30 @@ export async function sendEmail(options: SendEmailOptions | SendEmailWithLogging
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      console.log(`📧 ACS Attempt ${attempt}/${MAX_RETRIES} to send email to ${to}`);
+      console.log(`📧 SMTP Attempt ${attempt}/${MAX_RETRIES} to send email to ${to}`);
 
-      const poller = await emailClient.beginSend(message);
-      const result = await poller.pollUntilDone();
+      const info = await transporter.sendMail(mailOptions);
 
-      if (result.status === "Succeeded") {
-        console.log("✅ Email sent successfully via ACS:", result.id);
-        if (emailLogId) {
-          await updateEmailLogStatus(emailLogId, 'Sent', 'Email sent successfully', result.id);
-        }
-        return { success: true, messageId: result.id };
-      } else {
-        console.error("❌ ACS send failed with status:", result.status, result.error);
-        if (emailLogId) {
-          await updateEmailLogStatus(emailLogId, 'Failed', result.error?.message || 'Unknown error');
-        }
-        return { success: false, error: result.error };
+      console.log("✅ Email sent successfully via SMTP:", info.messageId);
+      if (emailLogId) {
+        await updateEmailLogStatus(emailLogId, 'Sent', 'Email sent successfully', info.messageId);
       }
+      return { success: true, messageId: info.messageId };
+
     } catch (error: any) {
-      const isRateLimited = error?.statusCode === 429 || error?.code === 'TooManyRequests';
+      // SMTP errors often include status codes or specific messages
+      const isRateLimited = error?.responseCode === 421 || error?.message?.includes('Too many') || error?.message?.includes('rate limit');
 
       if (isRateLimited && attempt < MAX_RETRIES) {
-        // Exponential backoff: 5s, 10s, 20s, 40s
+        // Exponential backoff
         const delayMs = BASE_DELAY_MS * Math.pow(2, attempt - 1);
-        console.warn(`⚠️ ACS rate limited (429). Waiting ${delayMs / 1000}s before retry (attempt ${attempt}/${MAX_RETRIES})...`);
+        console.warn(`⚠️ SMTP rate limited. Waiting ${delayMs / 1000}s before retry (attempt ${attempt}/${MAX_RETRIES})...`);
         await new Promise(resolve => setTimeout(resolve, delayMs));
         continue;
       }
 
       // Final attempt failed or non-retryable error
-      console.error(`❌ ACS email failed (attempt ${attempt}/${MAX_RETRIES}):`, error?.message || error);
+      console.error(`❌ SMTP email failed (attempt ${attempt}/${MAX_RETRIES}):`, error?.message || error);
       if (emailLogId) {
         await updateEmailLogStatus(emailLogId, 'Failed', error?.message || 'Send error');
       }

@@ -31,7 +31,7 @@ export interface EmailLogEntry {
     emailBodyPreview?: string;
     status: EmailLogStatus;
     statusMessage?: string;
-    acsMessageId?: string;
+    messageId?: string;
     metadata?: Record<string, any>;
 }
 
@@ -70,7 +70,7 @@ export async function logEmail(entry: EmailLogEntry): Promise<number | null> {
                 email_body_preview: bodyPreview,
                 status: entry.status,
                 status_message: entry.statusMessage || null,
-                acs_message_id: entry.acsMessageId || null,
+                message_id: entry.messageId || null,
                 metadata: entry.metadata || null,
                 sent_at: entry.status === 'Sent' || entry.status === 'Delivered' ? new Date().toISOString() : null,
                 created_at: new Date().toISOString()
@@ -96,7 +96,7 @@ export async function updateEmailLogStatus(
     logId: number,
     status: EmailLogStatus,
     statusMessage?: string,
-    acsMessageId?: string
+    messageId?: string
 ): Promise<boolean> {
     try {
         const sentAt = (status === 'Sent' || status === 'Delivered') ? new Date().toISOString() : null;
@@ -104,7 +104,7 @@ export async function updateEmailLogStatus(
 
         const updateData: any = { status };
         if (statusMessage) updateData.status_message = statusMessage;
-        if (acsMessageId) updateData.acs_message_id = acsMessageId;
+        if (messageId) updateData.message_id = messageId;
         if (sentAt) updateData.sent_at = sentAt;
         if (deliveredAt) updateData.delivered_at = deliveredAt;
 
@@ -235,7 +235,7 @@ export async function fetchEmailLogs(filters: EmailLogFilters): Promise<EmailLog
             emailBodyPreview: row.email_body_preview,
             status: row.status,
             statusMessage: row.status_message,
-            acsMessageId: row.acs_message_id,
+            messageId: row.message_id,
             originalEmailId: row.original_email_id,
             resendCount: row.resend_count,
             lastResentAt: row.last_resent_at,
@@ -290,7 +290,7 @@ export async function getEmailLogById(id: number): Promise<EmailLogRecord | null
             emailBodyPreview: data.email_body_preview,
             status: data.status,
             statusMessage: data.status_message,
-            acsMessageId: data.acs_message_id,
+            messageId: data.message_id,
             originalEmailId: data.original_email_id,
             resendCount: data.resend_count,
             lastResentAt: data.last_resent_at,

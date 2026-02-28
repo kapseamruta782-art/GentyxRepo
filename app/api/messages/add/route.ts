@@ -40,7 +40,8 @@ export async function POST(req: Request) {
         attachment_url: attachment_url || null,
         attachment_name: attachment_name || null,
         service_center_id: parsedServiceCenterId,
-        cpa_id: parsedCpaId
+        cpa_id: parsedCpaId,
+        created_at: new Date().toISOString()
       })
       .select()
       .single();

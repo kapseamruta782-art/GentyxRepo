@@ -1,11 +1,6 @@
 // /app/api/messages/upload-attachment/route.ts
 import { NextResponse } from "next/server";
-import {
-    BlobServiceClient,
-    StorageSharedKeyCredential,
-    generateBlobSASQueryParameters,
-    BlobSASPermissions,
-} from "@azure/storage-blob";
+import { containerClient } from "@/lib/azure";
 
 export const dynamic = "force-dynamic";
 
@@ -35,43 +30,19 @@ export async function POST(req: Request) {
         const fileName = `${Date.now()}-${file.name}`; // Unique filename
         const blobPath = `client-${clientId}/messages/${fileName}`;
 
-        const account = process.env.AZURE_STORAGE_ACCOUNT_NAME!;
-        const key = process.env.AZURE_STORAGE_ACCOUNT_KEY!;
-        const containerName = process.env.AZURE_STORAGE_CONTAINER_NAME!;
-
-        // Create clients with shared key credential for SAS generation
-        const sharedKeyCredential = new StorageSharedKeyCredential(account, key);
-        const blobServiceClient = new BlobServiceClient(
-            `https://${account}.blob.core.windows.net`,
-            sharedKeyCredential
-        );
-        const containerClient = blobServiceClient.getContainerClient(containerName);
-        await containerClient.createIfNotExists();
-
         const blockBlobClient = containerClient.getBlockBlobClient(blobPath);
 
-        // Upload file
+        // Upload file via shim (uses Supabase)
         await blockBlobClient.uploadData(buffer, {
             blobHTTPHeaders: { blobContentType: file.type },
         });
 
-        // Generate SAS URL for the file (valid for 1 year)
-        const expiresOn = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
-        const sas = generateBlobSASQueryParameters(
-            {
-                containerName,
-                blobName: blobPath,
-                permissions: BlobSASPermissions.parse("r"),
-                expiresOn,
-            },
-            sharedKeyCredential
-        ).toString();
-
-        const sasUrl = `${blockBlobClient.url}?${sas}`;
+        // The shim's URL is the Supabase public URL
+        const publicUrl = blockBlobClient.url;
 
         return NextResponse.json({
             success: true,
-            attachmentUrl: sasUrl,
+            attachmentUrl: publicUrl,
             attachmentName: file.name,
         });
     } catch (err: any) {

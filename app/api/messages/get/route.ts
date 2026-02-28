@@ -30,7 +30,7 @@ export async function GET(req: Request) {
       .from("onboarding_messages")
       .select(`
         *,
-        clients(client_name)
+        Clients(client_name)
       `);
 
     // Applying Filters
@@ -76,7 +76,7 @@ export async function GET(req: Request) {
     // Flatten client name
     const processedMessages = (messages || []).map((m: any) => ({
       ...m,
-      client_name: m.clients?.client_name
+      client_name: m.Clients?.client_name
     }));
 
     console.log(`✅ Found ${processedMessages.length} messages`);

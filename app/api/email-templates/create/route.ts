@@ -12,6 +12,7 @@ export async function POST(req: Request) {
         name,
         subject,
         body,
+        is_default: false,
         created_at: new Date().toISOString()
       });
 
