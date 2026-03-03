@@ -38,8 +38,8 @@ export function TopNav() {
   }
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-white">
-      <div className="mx-auto flex h-14 items-center px-4">
+    <header className="sticky top-0 z-40 border-b bg-white shadow-sm">
+      <div className="mx-auto flex h-16 items-center px-6">
 
         {/* ✅ LEFT SIDE — DATE & TIME */}
         <div className="flex-1">
@@ -47,48 +47,53 @@ export function TopNav() {
         </div>
 
         {/* ✅ RIGHT SIDE ICONS */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Button
-            className="rounded-full bg-[#470D1B] text-white hover:bg-[#C5A059] hover:text-white border border-[#5a1f2d] shadow-sm px-4"
+            className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-200 border-none shadow-sm px-5"
             size="sm"
-            onClick={() => window.open("https://www.prolegacy.com/", "_blank")}
-            title="Prolegacy.com"
+            onClick={() => window.open("https://gentyx.com/", "_blank")}
+            title="Gentyx.com"
           >
             <Globe className="size-4 mr-2" />
-            <span className="text-xs font-semibold tracking-wide">PROLEGACY.COM</span>
+            <span className="text-xs font-semibold tracking-wide">Schedule a Call</span>
           </Button>
 
           <Button
-            className="rounded-full bg-[#470D1B] text-white hover:bg-[#C5A059] hover:text-white border border-[#5a1f2d] shadow-sm ml-1 px-4"
+            variant="ghost"
+            className="rounded-full text-primary hover:text-accent hover:bg-transparent transition-all duration-200 px-4"
             size="sm"
             onClick={() => router.push("/inbox")}
             title="Inbox"
           >
             <Inbox className="size-4 mr-2" />
-            <span className="text-xs font-semibold tracking-wide">INBOX</span>
+            <span className="text-xs font-semibold tracking-wide uppercase">INBOX</span>
           </Button>
 
           <Button
-            className="rounded-full bg-[#470D1B] text-white hover:bg-[#C5A059] hover:text-white border border-[#5a1f2d] shadow-sm ml-1 px-4"
+            variant="ghost"
+            className="rounded-full text-primary hover:text-accent hover:bg-transparent transition-all duration-200 px-4"
             size="sm"
             onClick={() => router.push("/help")}
             title="Help"
           >
             <Handshake className="size-4 mr-2" />
-            <span className="text-xs font-semibold tracking-wide">HELP</span>
+            <span className="text-xs font-semibold tracking-wide uppercase">HELP</span>
           </Button>
 
           <Button
-            className="rounded-full bg-[#470D1B] text-white hover:bg-[#C5A059] hover:text-white border border-[#5a1f2d] shadow-sm ml-1 px-4"
+            variant="ghost"
+            className="rounded-full text-primary hover:text-accent hover:bg-transparent transition-all duration-200 px-4"
             size="sm"
             onClick={() => router.push(getSettingsPath())}
             title="Profile & Settings"
           >
             <Settings className="size-4 mr-2" />
-            <span className="text-xs font-semibold tracking-wide">SETTINGS</span>
+            <span className="text-xs font-semibold tracking-wide uppercase">SETTINGS</span>
           </Button>
 
-          <div className="ml-4 text-xs font-bold tracking-widest uppercase text-muted-foreground cursor-default select-none">
+          <div className="ml-4 h-8 w-px bg-border" />
+
+          <div className="ml-4 text-xs font-bold tracking-widest uppercase text-muted-foreground cursor-default select-none bg-muted/50 px-3 py-1.5 rounded-full border border-border/50">
             {role}
           </div>
         </div>

@@ -262,13 +262,13 @@ export default function AdminTasksPage() {
     },
 
 
-    // ✅ ACTIONS COLUMN (LAST + CENTERED)
+    // ✅ ACTIONS COLUMN (LAST + RIGHT ALIGNED)
     {
       key: "actions",
       header: "Actions",
-      className: "text-center",
+      className: "text-right",
       render: (row) => (
-        <div className="flex items-center justify-center gap-2 w-full">
+        <div className="flex items-center justify-end gap-2 w-full pr-4">
           {/* ✅ VIEW DOCS (only for completed tasks WITH document requirement) - fixed width for alignment */}
           <div className="w-[85px]">
             {row.status === "Completed" && (row.documentRequired === 1 || row.documentRequired === true) && (

@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         created_at,
         service_center_id,
         cpa_id,
-        onboarding_stages(stage_name),
+        onboarding_stages!fk_clients_stage(stage_name),
         service_centers(center_name),
         cpa_centers(cpa_name)
       `);

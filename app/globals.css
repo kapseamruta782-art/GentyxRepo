@@ -4,34 +4,44 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  /* Primary button color: Bright Blue #00B0F0 */
-  --primary: oklch(0.65 0.22 220);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  /* Accent/CTA hover: Mid Green #8BC53D */
-  --accent: oklch(0.72 0.18 120);
-  --accent-foreground: oklch(0.145 0 0);
+  /* GENTYX BRAND COLORS */
+  --background: #E7E9D7;
+  --surface: #FFFFFF;
+  --foreground: #0F2A3D;
+  --text-dark: #0F2A3D;
+  --card: #FFFFFF;
+  --card-foreground: #0F2A3D;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F2A3D;
+
+  /* Primary button/Navy: deep navy blue #0B1F4B */
+  --primary: #0B1F4B;
+  --primary-foreground: #FFFFFF;
+
+  /* Accent/Secondary/CTA: bright lime green #8CC63F */
+  --secondary: #8CC63F;
+  --secondary-foreground: #0B1F4B;
+  --accent: #8CC63F;
+  --accent-foreground: #0B1F4B;
+
+  --muted: #E2E8F0;
+  --muted-foreground: #64748B;
+
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  /* Chart colors: In Progress, Pending, Needs Fix, Approved */
-  --chart-1: oklch(0.72 0.18 120);
-  --chart-2: oklch(0.65 0.2 40);
-  --chart-3: oklch(0.5 0.2 20);
-  --chart-4: oklch(0.65 0.22 220);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
+  --border: #CBD5E1;
+  --input: #CBD5E1;
+  --ring: #0B1F4B;
+
+  /* Chart colors */
+  --chart-1: #0B1F4B;
+  --chart-2: #8CC63F;
+  --chart-3: #0F2A3D;
+  --chart-4: #64748B;
+  --chart-5: #94A3B8;
+
+  --radius: 8px;
+  --transition: 200ms ease;
   /* Sidebar: White background with black text */
   --sidebar: #FFFFFF;
   --sidebar-foreground: #334155;
@@ -52,53 +62,61 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  /* Dark mode primary: Bright Blue */
-  --primary: oklch(0.7 0.22 220);
-  --primary-foreground: oklch(0.145 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  /* Dark mode accent: Mid Green */
-  --accent: oklch(0.75 0.18 120);
-  --accent-foreground: oklch(0.145 0 0);
+  --background: #0F2A3D;
+  --surface: #1E3A8A;
+  --foreground: #FFFFFF;
+  --text-dark: #F1F5F9;
+  --card: #1E3A8A;
+  --card-foreground: #FFFFFF;
+  --popover: #1E3A8A;
+  --popover-foreground: #FFFFFF;
+
+  --primary: #8CC63F;
+  --primary-foreground: #0B1F4B;
+
+  --secondary: #0B1F4B;
+  --secondary-foreground: #FFFFFF;
+  --accent: #8CC63F;
+  --accent-foreground: #0B1F4B;
+
+  --muted: #334155;
+  --muted-foreground: #94A3B8;
+
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
+  --border: #334155;
+  --input: #334155;
+  --ring: #8CC63F;
+
   /* Dark mode chart colors adapted */
-  --chart-1: oklch(0.75 0.18 120);
-  --chart-2: oklch(0.65 0.2 40);
-  --chart-3: oklch(0.55 0.2 20);
-  --chart-4: oklch(0.7 0.22 220);
-  --chart-5: oklch(0.645 0.246 16.439);
-  /* Dark mode sidebar: Soft green adapted */
-  --sidebar: oklch(0.25 0.02 120);
-  --sidebar-foreground: oklch(0.9 0.02 120);
-  --sidebar-primary: oklch(0.75 0.18 120);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.75 0.18 120);
-  --sidebar-accent-foreground: oklch(1 0 0);
-  --sidebar-border: oklch(0.3 0.02 120);
-  --sidebar-ring: oklch(0.439 0 0);
+  --chart-1: #8CC63F;
+  --chart-2: #0B1F4B;
+  --chart-3: #FFFFFF;
+  --chart-4: #94A3B8;
+  --chart-5: #64748B;
+
+  /* Dark mode sidebar */
+  --sidebar: #0F2A3D;
+  --sidebar-foreground: #FFFFFF;
+  --sidebar-primary: #8CC63F;
+  --sidebar-primary-foreground: #0B1F4B;
+  --sidebar-accent: #1E3A8A;
+  --sidebar-accent-foreground: #FFFFFF;
+  --sidebar-border: #334155;
+  --sidebar-ring: #8CC63F;
+
   /* Dark mode company colors */
-  --color-success: oklch(0.75 0.15 120);
+  --color-success: #8CC63F;
   --color-warning: oklch(0.65 0.2 40);
   --color-error: oklch(0.55 0.2 20);
-  --color-info: oklch(0.75 0.1 220);
+  --color-info: #0B1F4B;
 }
 
 @theme inline {
-  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
+  --color-text-dark: var(--text-dark);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);

@@ -206,7 +206,7 @@ export default function AdminDashboard() {
       label: "Total Clients",
       value: totalClients,
       icon: Users,
-      color: "text-blue-500",
+      color: "text-primary",
       helper: "All registered clients",
       onClick: () => router.push("/admin/clients"),
     },
@@ -214,7 +214,7 @@ export default function AdminDashboard() {
       label: "Active Onboarding",
       value: activeOnboarding,
       icon: UserCheck,
-      color: "text-emerald-500",
+      color: "text-accent",
       helper: "Clients with onboarding in progress",
       onClick: () => router.push("/admin/clients?status=active"),
     },
@@ -222,7 +222,7 @@ export default function AdminDashboard() {
       label: "Tasks In Progress",
       value: inProgressTasks,
       icon: ListChecks,
-      color: "text-amber-500",
+      color: "text-[#0B1F3B]",
       helper: "Active tasks requiring action",
       onClick: () => router.push("/admin/tasks?status=in-progress"),
     },
@@ -230,7 +230,7 @@ export default function AdminDashboard() {
       label: "Overdue Tasks",
       value: overdueTasks,
       icon: Clock,
-      color: "text-red-500",
+      color: "text-destructive",
       helper: "Past due date, needs attention",
       onClick: () => router.push("/admin/tasks?filter=overdue"),
     },
@@ -344,7 +344,7 @@ export default function AdminDashboard() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-base">
-                <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-[#0B1F3B] to-[#8DC63F] flex items-center justify-center">
                   <UserCheck className="h-3.5 w-3.5 text-white" />
                 </div>
                 Client Onboarding Progress
@@ -359,11 +359,11 @@ export default function AdminDashboard() {
                 (() => {
                   // Group clients by completion percentage
                   const groups = [
-                    { label: "Not Started", range: [0, 0], color: "#9ca3af" },
-                    { label: "Early (1-25%)", range: [1, 25], color: "#f59e0b" },
-                    { label: "Mid (26-50%)", range: [26, 50], color: "#3b82f6" },
-                    { label: "Advanced (51-75%)", range: [51, 75], color: "#8b5cf6" },
-                    { label: "Near Done (76-99%)", range: [76, 99], color: "#10b981" },
+                    { label: "Not Started", range: [0, 0], color: "#94a3b8" },
+                    { label: "Early (1-25%)", range: [1, 25], color: "#cbd5e1" },
+                    { label: "Mid (26-50%)", range: [26, 50], color: "#0B1F3B" },
+                    { label: "Advanced (51-75%)", range: [51, 75], color: "#1e293b" },
+                    { label: "Near Done (76-99%)", range: [76, 99], color: "#8DC63F" },
                     { label: "Completed", range: [100, 100], color: "#059669" },
                   ];
 
@@ -408,7 +408,7 @@ export default function AdminDashboard() {
                                 if (active && payload && payload.length) {
                                   const data = payload[0].payload;
                                   return (
-                                    <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-lg text-sm">
+                                    <div className="bg-[#0B1F3B] text-white px-3 py-2 rounded-lg shadow-lg text-sm border border-white/10">
                                       <span className="font-semibold">{data.name}</span>
                                       <span>: {data.value} clients</span>
                                     </div>
@@ -459,7 +459,7 @@ export default function AdminDashboard() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-base">
-                <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-[#0B1F3B] to-[#8DC63F] flex items-center justify-center">
                   <ListChecks className="h-3.5 w-3.5 text-white" />
                 </div>
                 Task Status Overview
@@ -473,10 +473,10 @@ export default function AdminDashboard() {
               ) : (
                 (() => {
                   const statusConfig = [
-                    { status: "Pending", color: "#f59e0b" },
-                    { status: "In Progress", color: "#3b82f6" },
-                    { status: "In Review", color: "#8b5cf6" },
-                    { status: "Completed", color: "#10b981" },
+                    { status: "Pending", color: "#94a3b8" },
+                    { status: "In Progress", color: "#0B1F3B" },
+                    { status: "In Review", color: "#475569" },
+                    { status: "Completed", color: "#8DC63F" },
                     { status: "Approved", color: "#059669" },
                   ];
 
@@ -515,7 +515,7 @@ export default function AdminDashboard() {
                                 if (active && payload && payload.length) {
                                   const data = payload[0].payload;
                                   return (
-                                    <div className="bg-gray-900 text-white px-3 py-2 rounded-lg shadow-lg text-sm">
+                                    <div className="bg-[#0B1F3B] text-white px-3 py-2 rounded-lg shadow-lg text-sm border border-white/10">
                                       <span className="font-semibold">{data.name}</span>
                                       <span>: {data.value} tasks</span>
                                     </div>

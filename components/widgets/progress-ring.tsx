@@ -32,9 +32,9 @@ export function ProgressRing({
 
   // ✅ COLOR RULES
   const getColor = () => {
-    if (animatedValue <= 30) return "#ef4444" // red
-    if (animatedValue <= 70) return "#f59e0b" // yellow
-    return "#22c55e" // green
+    if (animatedValue <= 30) return "#94a3b8" // Slate for low progress
+    if (animatedValue <= 70) return "#0B1F3B" // GENTYX Navy for mid progress
+    return "#8DC63F" // GENTYX Green for high progress
   }
 
   const tooltipText =
@@ -85,4 +85,3 @@ export function ProgressRing({
     </div>
   )
 }
- 

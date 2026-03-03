@@ -3,11 +3,11 @@
 "use client";
 
 import React, { useState } from "react";
-import "./login.css"; // Use original AccountHub CSS
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { useUIStore } from "@/store/ui-store"; // ← Zustand store
+import { useUIStore } from "@/store/ui-store";
+import { Logo } from "@/components/ui/logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -194,72 +194,76 @@ export default function LoginPage() {
   );
   */
 
-  // NEW LOGIN UI
+  // NEW LOGIN UI with Tailwind
   return (
-    <div className="login-page-new">
-      {/* LOGO */}
-      <div className="logo-container">
-        <img
-          src="/images/ClientPortal%20Full-Logo.png"
-          alt="Legacy Accounting Services"
-          className="logo-img"
-        />
-      </div>
-
+    <div className="flex flex-col items-center justify-center min-h-screen w-full bg-background font-sans p-5">
       {/* TITLE */}
-      <h1 className="portal-title">Client Portal</h1>
+      <h1 className="font-serif text-5xl md:text-6xl text-foreground font-semibold mb-8 tracking-tight text-center">
+        Client Portal
+      </h1>
 
-      {/* FORM */}
-      <form onSubmit={handleSubmit} className="login-form-container">
-        <div className="input-group">
-          <label className="input-label">Email Address</label>
-          <input
-            type="email"
-            placeholder="user@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="input-field"
-            required
-          />
+      {/* FORM CARD */}
+      <div className="w-full max-w-[440px] bg-surface p-8 md:p-12 rounded-lg shadow-sm border border-border/50">
+        {/* LOGO HEADER */}
+        <div className="flex justify-center w-full mb-8">
+          <Logo />
         </div>
 
-        <div className="input-group">
-          <label className="input-label">Password</label>
-          <div className="password-wrapper">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-foreground text-left">Email Address</label>
             <input
-              type={showPassword ? "text" : "password"}
-              placeholder="********"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="input-field"
+              type="email"
+              placeholder="user@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-3 rounded-md border border-input text-base text-foreground bg-background outline-none transition-all duration-200 focus:border-ring focus:ring-2 focus:ring-ring/20 placeholder:text-muted-foreground"
               required
             />
-            <button
-              type="button"
-              className="eye-btn"
-              onClick={() => setShowPassword((prev) => !prev)}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
           </div>
-        </div>
 
-        {errorMsg && (
-          <p className="error-text">
-            {errorMsg}
-          </p>
-        )}
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-foreground text-left">Password</label>
+            <div className="relative w-full">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="********"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 rounded-md border border-input text-base text-foreground bg-background outline-none transition-all duration-200 focus:border-ring focus:ring-2 focus:ring-ring/20 placeholder:text-muted-foreground"
+                required
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-2 rounded-full hover:bg-muted/50 flex items-center justify-center"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+          </div>
 
-        <button type="submit" className="login-button-new" disabled={loading}>
-          {loading ? "Logging in..." : "LOG IN"}
-        </button>
-      </form>
+          {errorMsg && (
+            <p className="text-destructive text-center mt-2 text-sm font-medium">
+              {errorMsg}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            className="w-full py-3.5 bg-primary text-primary-foreground border-none rounded-full font-bold text-sm tracking-wide cursor-pointer mt-4 transition-all duration-200 shadow-sm hover:translate-y-[-1px] hover:shadow-md hover:bg-primary/90 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
+            disabled={loading}
+          >
+            {loading ? "Logging in..." : "LOG IN"}
+          </button>
+        </form>
+      </div>
 
       {/* FOOTER */}
-      <div className="footer-container">
-        <div className="powered-by">POWERED BY HUBONE SYSTEMS</div>
+      <div className="mt-12 text-center text-xs text-muted-foreground">
+        <div className="font-bold uppercase mb-2 tracking-widest text-[10px] text-foreground">POWERED BY HUBONE SYSTEMS</div>
         <p>
-          © 2014–{new Date().getFullYear()} HubOne Systems Inc.  All Rights Reserved
+          © 2014–{new Date().getFullYear()} HubOne Systems Inc. – All Rights Reserved
         </p>
       </div>
     </div>

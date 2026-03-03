@@ -13,6 +13,8 @@ import { PanelLeftClose, PanelLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+import { Logo } from "@/components/ui/logo";
+
 /* -------------------------------------------------------
    Helper: read cookie on client
 ------------------------------------------------------- */
@@ -94,21 +96,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         {/* LOGO SECTION - Clickable to navigate to dashboard */}
         <Link
           href={getDashboardUrl()}
-          className="h-24 flex flex-col items-center justify-center px-2 border-b border-white/10 bg-[#470D1B] cursor-pointer hover:bg-[#5a1f2d] transition-colors"
+          className="h-20 flex items-center px-6 bg-white border-b border-slate-100 cursor-pointer hover:opacity-90 transition-opacity"
           title="Go to Dashboard"
         >
           {sidebarCollapsed ? (
-            <img
-              src="/images/imagepng.png"
-              alt="Logo"
-              className="w-10 h-10 object-contain"
-            />
+            <span style={{ color: "#8CC63F" }} className="text-2xl font-bold ml-1">&gt;</span>
           ) : (
-            <img
-              src="/images/legacy%20client%20portal%20branding%20logo.png"
-              alt="Legacy Client Portal"
-              className="max-w-[190px] max-h-[93px] w-auto h-auto object-contain"
-            />
+            <Logo />
           )}
         </Link>
 
