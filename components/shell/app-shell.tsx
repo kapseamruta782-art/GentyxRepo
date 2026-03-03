@@ -135,7 +135,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       {/* ---------- MAIN CONTENT ---------- */}
       <div
         className={cn(
-          "flex flex-col flex-1 transition-all duration-300 ease-in-out",
+          "flex flex-col flex-1 transition-all duration-300 ease-in-out min-w-0",
           sidebarCollapsed ? "ml-0 md:ml-16" : "ml-0 md:ml-64"
         )}
       >

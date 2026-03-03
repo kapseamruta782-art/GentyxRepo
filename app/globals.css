@@ -45,14 +45,14 @@
   /* Sidebar: White background with black text */
   --sidebar: #FFFFFF;
   --sidebar-foreground: #334155;
-  /* Active tab: Transparent/White BG with Burgundy Text */
-  --sidebar-primary: #FFFFFF;
-  --sidebar-primary-foreground: #470D1B;
-  /* Hover state: Very light gray to indicate interactivity, but keeping it subtle */
-  --sidebar-accent: #F8FAFC;
-  --sidebar-accent-foreground: #470D1B;
+  /* Active tab: Brand Green with Navy Text */
+  --sidebar-primary: #8CC63F;
+  --sidebar-primary-foreground: #0B1F4B;
+  /* Hover state: Light variant of brand green */
+  --sidebar-accent: #f4f9ed;
+  --sidebar-accent-foreground: #8CC63F;
   --sidebar-border: #E2E8F0;
-  --sidebar-ring: #470D1B;
+  --sidebar-ring: #8CC63F;
 
   /* Company color tokens */
   --color-success: oklch(0.8 0.15 120);

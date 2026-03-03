@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   title: "ClientHub",
   description: "Client Onboarding Platform",
   generator: "v0.app",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({

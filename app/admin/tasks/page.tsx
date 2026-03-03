@@ -266,46 +266,43 @@ export default function AdminTasksPage() {
     {
       key: "actions",
       header: "Actions",
-      className: "text-right",
+      className: "min-w-[350px] text-right px-4", // Increased min-width
       render: (row) => (
-        <div className="flex items-center justify-end gap-2 w-full pr-4">
-          {/* ✅ VIEW DOCS (only for completed tasks WITH document requirement) - fixed width for alignment */}
-          <div className="w-[85px]">
-            {row.status === "Completed" && (row.documentRequired === 1 || row.documentRequired === true) && (
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-8 gap-1 text-primary"
-                onClick={() => {
-                  // Navigate to the specific folder for this task's completion docs
-                  // New structure: Assigned Task Completion Documents/{clientName}/{taskTitle}
-                  const clientName = getClientName(row.clientId);
-                  const folderPath = encodeURIComponent(`Assigned Task Completion Documents/${clientName}/${row.title}`);
-                  router.push(`/admin/documents?clientId=${row.clientId}&folder=${folderPath}`);
-                }}
-                title="View completion documents"
-              >
-                <Eye className="h-4 w-4" />
-                <span className="text-xs">View Docs</span>
-              </Button>
-            )}
-          </div>
+        <div className="flex items-center justify-end gap-3 w-full">
+          {/* ✅ VIEW DOCS (only for completed tasks WITH document requirement) */}
+          {row.status === "Completed" && (row.documentRequired === 1 || row.documentRequired === true) ? (
+            <Button
+              size="sm"
+              variant="ghost"
+              className="h-8 gap-1 text-primary whitespace-nowrap"
+              onClick={() => {
+                const clientName = getClientName(row.clientId);
+                const folderPath = encodeURIComponent(`Assigned Task Completion Documents/${clientName}/${row.title}`);
+                router.push(`/admin/documents?clientId=${row.clientId}&folder=${folderPath}`);
+              }}
+              title="View completion documents"
+            >
+              <Eye className="h-4 w-4" />
+              <span className="text-xs">Docs</span>
+            </Button>
+          ) : (
+            <div className="w-16" /> /* Spacer to maintain alignment */
+          )}
 
           {/* ✅ VIEW CLIENT TASKS */}
           <Button
             size="sm"
             variant="outline"
+            className="whitespace-nowrap h-8"
             onClick={() => {
               const tasksForClient = allTasks.filter(
                 (t) => Number(t.clientId) === Number(row.clientId)
               );
-
               setSelectedClientTasks(tasksForClient);
               setSelectedClientName(getClientName(row.clientId));
-              setSelectedClientId(row.clientId); // ✅ REQUIRED FOR VIEW CLIENT BUTTON
+              setSelectedClientId(row.clientId);
               setOpenClientTasks(true);
             }}
-
           >
             All Tasks
           </Button>
@@ -314,6 +311,7 @@ export default function AdminTasksPage() {
           <Button
             size="sm"
             variant="outline"
+            className="h-8"
             onClick={() =>
               openDrawer("assignTask", {
                 taskId: row.id,
@@ -324,48 +322,39 @@ export default function AdminTasksPage() {
             Edit
           </Button>
 
-          {/* ✅ DELETE */}
-          {/* ✅ DELETE - Only for manual Assigned tasks */}
+          {/* ✅ DELETE / LOCKED */}
           {row.taskType === "ASSIGNED" ? (
             <Button
               size="sm"
               variant="destructive"
+              className="h-8"
               onClick={async () => {
                 if (!confirm("Delete this task?")) return;
-
                 const res = await fetch("/api/tasks/delete", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    task_id: row.id,
-                  }),
+                  body: JSON.stringify({ task_id: row.id }),
                 });
-
                 if (res.ok) {
                   toast({ title: "Task deleted" });
                   mutate(["tasks"]);
                 } else {
-                  toast({
-                    title: "Failed to delete task",
-                    variant: "destructive",
-                  });
+                  toast({ title: "Failed to delete task", variant: "destructive" });
                 }
               }}
             >
               Delete
             </Button>
           ) : (
-            // For Onboarding/Subtasks, we don't allow delete here (must be done in Stages)
             <Button
               size="sm"
               variant="ghost"
-              className="text-muted-foreground opacity-50 cursor-not-allowed"
+              className="h-8 text-muted-foreground opacity-50 cursor-not-allowed"
               title="Manage in Stages"
             >
               Locked
             </Button>
           )}
-
         </div>
       ),
     },
@@ -467,7 +456,7 @@ export default function AdminTasksPage() {
   const end = Math.min(page * pageSize, total);
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-4 min-w-0">
       {/* HEADER */}
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold">Tasks</h1>
