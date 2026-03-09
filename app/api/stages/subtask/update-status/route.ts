@@ -31,15 +31,7 @@ export async function POST(req: Request) {
                 status,
                 client_stages (
                     stage_name,
-                    client_id,
-                    Clients (
-                        client_name,
-                        primary_contact_name,
-                        cpa_id,
-                        service_center_id,
-                        cpa_centers ( cpa_name ),
-                        service_centers ( center_name )
-                    )
+                    client_id
                 )
             `)
             .eq("subtask_id", subtaskId)
@@ -51,6 +43,26 @@ export async function POST(req: Request) {
                 { success: false, error: "Subtask not found" },
                 { status: 404 }
             );
+        }
+
+        // Fetch client data separately because client_stages might lack a foreign key to Clients
+        let clientData: any = null;
+        const clientStages: any = subtaskData?.client_stages;
+        const clientId = Array.isArray(clientStages) ? clientStages[0]?.client_id : clientStages?.client_id;
+        if (clientId) {
+            const { data } = await supabase
+                .from("Clients")
+                .select(`
+                    client_name,
+                    primary_contact_name,
+                    cpa_id,
+                    service_center_id,
+                    cpa_centers ( cpa_name ),
+                    service_centers ( center_name )
+                `)
+                .eq("client_id", clientId)
+                .maybeSingle();
+            clientData = data;
         }
 
         const previousStatus = subtaskData.status;
@@ -77,7 +89,7 @@ export async function POST(req: Request) {
                     const whoRole = (completedByRole || "CLIENT").toUpperCase();
                     let whoName = completedByName || "";
 
-                    const client = subtaskData.client_stages?.Clients;
+                    const client = clientData;
 
                     if (!whoName && client) {
                         switch (whoRole) {
@@ -85,10 +97,12 @@ export async function POST(req: Request) {
                                 whoName = client.primary_contact_name || client.client_name || "Client";
                                 break;
                             case "CPA":
-                                whoName = client.cpa_centers?.cpa_name || "CPA";
+                                const cpa = client.cpa_centers as any;
+                                whoName = (Array.isArray(cpa) ? cpa[0]?.cpa_name : cpa?.cpa_name) || "CPA";
                                 break;
                             case "SERVICE_CENTER":
-                                whoName = client.service_centers?.center_name || "Service Center";
+                                const sc = client.service_centers as any;
+                                whoName = (Array.isArray(sc) ? sc[0]?.center_name : sc?.center_name) || "Service Center";
                                 break;
                             default:
                                 whoName = "User";
@@ -104,7 +118,7 @@ export async function POST(req: Request) {
                             completedByRole: whoRole as any,
                             completedByName: whoName || "User",
                             taskType: "ONBOARDING",
-                            stageName: subtaskData.client_stages?.stage_name || "Onboarding",
+                            stageName: (Array.isArray(clientStages) ? clientStages[0]?.stage_name : clientStages?.stage_name) || "Onboarding",
                         }).catch(err => console.error(`❌ Admin email failed for ${admin.email}:`, err));
                     }
                 }

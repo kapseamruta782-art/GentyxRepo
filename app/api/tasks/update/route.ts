@@ -34,7 +34,7 @@ export async function POST(req: Request) {
       .from("onboarding_tasks")
       .select(`
         *,
-        clients (
+        Clients (
           client_id,
           client_name,
           primary_contact_name,
@@ -65,7 +65,7 @@ export async function POST(req: Request) {
 
     const clientId = taskData.client_id;
     const previousStatus = taskData.status;
-    const clientData = taskData.clients;
+    const clientData = taskData.Clients;
 
     // Track what fields are being updated for the notification
     const updatedFields: string[] = [];
